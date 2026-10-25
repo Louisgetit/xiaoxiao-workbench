@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>小小工作台 · 清新个人仪表盘</title>
+<meta name="description" content="清新可爱的个人工作台：待办、学习、减脂、喂养、记账、纪念日一站式管理">
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8fd4b4">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="小小工作台">
+<meta name="application-name" content="小小工作台">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="nav" id="nav">
+    <div class="brand"><div class="logo">🌿</div><span>小小工作台</span></div>
+  </aside>
+  <main class="main" id="main">
+
+    <!-- ============ 首页 ============ -->
+    <section class="page on" id="p-home">
+      <div class="hero">
+        <div class="hi" id="ho-hi">你好呀</div>
+        <div class="qt" id="ho-quote">今天也要元气满满哦～</div>
+        <div class="qe" id="ho-quote-en"></div>
+        <div class="dt" id="ho-date"></div>
+      </div>
+      <div class="grid g4" id="ho-stats" style="margin-bottom:16px"></div>
+      <div class="grid g2">
+        <div class="card">
+          <div class="ct"><h3><span class="dot">📝</span>今日待办</h3><span class="r" id="ho-todo-r"></span></div>
+          <div id="ho-todo"></div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">📓</span>今日学习</h3><span class="r" id="ho-study-r"></span></div>
+          <div id="ho-study"></div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">🏋️</span>今日减脂</h3><span class="r" id="ho-fit-r"></span></div>
+          <div id="ho-fit"></div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">💰</span>今日记账</h3><span class="r" id="ho-money-r"></span></div>
+          <div id="ho-money"></div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">⭐️</span>星仔今日喂养</h3><span class="r" id="ho-baby-r"></span></div>
+          <div id="ho-baby"></div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">📅</span>近期提醒</h3></div>
+          <div id="ho-remind"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 待办 ============ -->
+    <section class="page" id="p-todo">
+      <div class="ph">
+        <div><h1>📝 待办事项</h1><div class="sub" id="td-sub"></div></div>
+        <div class="acts"><button class="btn pri" onclick="Todo.open()">＋ 新增待办</button></div>
+      </div>
+      <div class="grid g2">
+        <div class="card">
+          <div class="ct"><h3><span class="dot">☀️</span>今日待办</h3><span class="r" id="td-today-r"></span></div>
+          <div id="td-today"></div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">🗓️</span>近期待办</h3><span class="r" id="td-soon-r"></span></div>
+          <div class="scroll" id="td-soon"></div>
+        </div>
+      </div>
+      <div class="grid g2">
+        <div class="card">
+          <div class="ct"><h3><span class="dot">📆</span>待办日历</h3>
+            <span class="r"><button class="icobtn" onclick="Todo.mv(-1)">‹</button><b id="td-cal-t"></b><button class="icobtn" onclick="Todo.mv(1)">›</button></span></div>
+          <div class="cal-wk"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+          <div class="cal" id="td-cal"></div>
+          <div class="lg"><span><i style="background:#4fb08d"></i>已完成</span><span><i style="background:#f2c48b"></i>待完成</span><span><i style="background:#e08a7b"></i>已逾期</span></div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">🔍</span><span id="td-day-t">选中日期</span></h3><span class="r" id="td-day-r"></span></div>
+          <div class="scroll" id="td-day"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 学习 ============ -->
+    <section class="page" id="p-study">
+      <div class="ph">
+        <div><h1>📓 每日学习</h1><div class="sub" id="st-sub"></div></div>
+        <div class="acts">
+          <button class="btn gh" onclick="Study.autoPlay()" id="st-auto">🔊 连读单词</button>
+          <button class="btn gh" onclick="Study.showHistory()">📊 历史记录</button>
+        </div>
+      </div>
+      <div class="grid g4" id="st-stats" style="margin-bottom:16px"></div>
+      <div class="card">
+        <div class="ct"><h3><span class="dot">🔤</span>今日高频词汇 · 30 个</h3><span class="r" id="st-w-r"></span></div>
+        <div class="bar" style="margin-bottom:13px"><i id="st-w-bar" style="width:0"></i></div>
+        <div class="wgrid" id="st-words"></div>
+        <div class="hint" style="margin-top:12px">💡 点击卡片展开音标与例句，点 🔊 朗读，勾选表示「已认识 / 已掌握」</div>
+      </div>
+      <div class="card">
+        <div class="ct"><h3><span class="dot">💬</span>今日高频语句 · 5 句</h3><span class="r" id="st-s-r"></span></div>
+        <div class="bar amber" style="margin-bottom:13px"><i id="st-s-bar" style="width:0"></i></div>
+        <div id="st-sents"></div>
+      </div>
+      <div class="card">
+        <div class="ct"><h3><span class="dot">📈</span>近 30 天打卡</h3><span class="r" id="st-hist-r"></span></div>
+        <div id="st-heat"></div>
+      </div>
+    </section>
+
+    <!-- ============ 减脂 ============ -->
+    <section class="page" id="p-fat">
+      <div class="ph">
+        <div><h1>🏋️ 减脂计划</h1><div class="sub" id="fa-sub"></div></div>
+        <div class="acts">
+          <button class="btn pri" onclick="Fat.openSport()">＋ 运动记录</button>
+          <button class="btn pri" onclick="Fat.openDiet()">＋ 饮食记录</button>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="tab on" data-ft="sport" onclick="Fat.tab('sport')">🏃 运动</button>
+        <button class="tab" data-ft="diet" onclick="Fat.tab('diet')">🍱 饮食</button>
+      </div>
+
+      <div id="fa-sport">
+        <div class="grid g4" style="margin-bottom:16px" id="fa-sp-stats"></div>
+        <div class="grid g2">
+          <div class="card">
+            <div class="ct"><h3><span class="dot">📅</span>运动日历</h3>
+              <span class="r"><button class="icobtn" onclick="Fat.mv(-1)">‹</button><b id="fa-cal-t"></b><button class="icobtn" onclick="Fat.mv(1)">›</button></span></div>
+            <div class="cal-wk"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+            <div class="cal" id="fa-cal"></div>
+            <div class="lg"><span><i style="background:#4fb08d"></i>有运动</span><span style="color:#c47a3a">🔥 三伏天（初/中/末）</span></div>
+          </div>
+          <div class="card">
+            <div class="ct"><h3><span class="dot">🏃</span><span id="fa-day-t">选中日期</span></h3><span class="r" id="fa-day-r"></span></div>
+            <div class="scroll" id="fa-day"></div>
+            <hr class="sp">
+            <div class="ct"><h3><span class="dot">⚙️</span>自定义运动项目</h3></div>
+            <div id="fa-items"></div>
+            <div class="flexline" style="margin-top:9px">
+              <input id="fa-new-item" placeholder="新增运动项目，如：椭圆机" style="flex:1;min-width:120px">
+              <button class="btn sm pri" onclick="Fat.addItem()">添加</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="fa-diet" style="display:none">
+        <div class="grid g4" style="margin-bottom:16px" id="fa-dt-stats"></div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">🍵</span>每日固定：800ml 芡实赤豆薏米茶</h3><span class="r" id="fa-tea-r"></span></div>
+          <div id="fa-tea"></div>
+        </div>
+        <div class="grid g2">
+          <div class="card">
+            <div class="ct"><h3><span class="dot">🍱</span>饮食日历</h3>
+              <span class="r"><button class="icobtn" onclick="Fat.mv(-1)">‹</button><b id="fa-dtcal-t"></b><button class="icobtn" onclick="Fat.mv(1)">›</button></span></div>
+            <div class="cal-wk"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+            <div class="cal" id="fa-dtcal"></div>
+            <div class="lg"><span><i style="background:#e6915a"></i>有饮食记录</span></div>
+          </div>
+          <div class="card">
+            <div class="ct"><h3><span class="dot">🍽️</span><span id="fa-dtday-t">选中日期</span></h3><span class="r" id="fa-dtday-r"></span></div>
+            <div class="scroll" id="fa-dtday"></div>
+            <hr class="sp">
+            <div class="flexline"><button class="btn sm pri" onclick="Fat.openDiet({date:Fat.dsel})">＋ 添加饮食</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 星仔 ============ -->
+    <section class="page" id="p-baby">
+      <div class="ph">
+        <div><h1>⭐️ 星仔喂养</h1><div class="sub" id="bb-sub"></div></div>
+        <div class="acts"><button class="btn pri" onclick="Baby.openAdd()">＋ 新增记录</button></div>
+      </div>
+      <div class="grid g4" style="margin-bottom:16px" id="bb-stats"></div>
+      <div class="card">
+        <div class="ct"><h3><span class="dot">🍼</span><span id="bb-day-t">今日喂养清单</span></h3><span class="r" id="bb-day-r"></span></div>
+        <div class="bar" style="margin-bottom:13px"><i id="bb-bar" style="width:0"></i></div>
+        <div id="bb-list"></div>
+      </div>
+      <div class="grid g2">
+        <div class="card">
+          <div class="ct"><h3><span class="dot">📅</span>喂养日历</h3>
+            <span class="r"><button class="icobtn" onclick="Baby.mv(-1)">‹</button><b id="bb-cal-t"></b><button class="icobtn" onclick="Baby.mv(1)">›</button></span></div>
+          <div class="cal-wk"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+          <div class="cal" id="bb-cal"></div>
+          <div class="lg"><span><i style="background:#4fb08d"></i>全部完成</span><span><i style="background:#f2c48b"></i>部分完成</span></div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">📋</span>记录详情</h3><span class="r" id="bb-detail-r"></span></div>
+          <div class="scroll" id="bb-detail"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 记账 ============ -->
+    <section class="page" id="p-money">
+      <div class="ph">
+        <div><h1>💰 收支记账</h1><div class="sub" id="mn-sub"></div></div>
+        <div class="acts"><button class="btn pri" onclick="Money.open()">＋ 记一笔</button></div>
+      </div>
+      <div class="card tight">
+        <div class="ct"><h3><span class="dot">📊</span>日 / 月 / 年累计</h3>
+          <span class="r"><input type="date" id="mn-date" onchange="Money.render()" style="width:auto"></span></div>
+        <div class="grid g3" id="mn-sum"></div>
+      </div>
+      <div class="grid g2">
+        <div class="card">
+          <div class="ct"><h3><span class="dot">🧾</span><span id="mn-day-t">当日明细</span></h3><span class="r" id="mn-day-r"></span></div>
+          <div class="scroll" id="mn-day"></div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">📈</span>本月每日收支</h3><span class="r" id="mn-chart-r"></span></div>
+          <div class="bars" id="mn-chart"></div>
+          <hr class="sp">
+          <div class="ct"><h3><span class="dot">🏷️</span>本月分类支出 TOP</h3></div>
+          <div id="mn-cat"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct"><h3><span class="dot">📚</span>全部流水</h3>
+          <span class="r"><input id="mn-kw" placeholder="搜索备注/分类" oninput="Money.renderAll()" style="width:auto"></span></div>
+        <div class="scroll" id="mn-all"></div>
+      </div>
+    </section>
+
+    <!-- ============ 新闻 ============ -->
+    <section class="page" id="p-news">
+      <div class="ph">
+        <div><h1>📰 每日新闻</h1><div class="sub" id="nw-sub"></div></div>
+        <div class="acts"><button class="btn gh" onclick="News.refresh(true)">🔄 立即刷新</button></div>
+      </div>
+      <div class="tabs" id="nw-tabs"></div>
+      <div class="card"><div id="nw-list"></div></div>
+    </section>
+
+    <!-- ============ 纪念 ============ -->
+    <section class="page" id="p-anni">
+      <div class="ph">
+        <div><h1>📅 纪念日 · 生日</h1><div class="sub" id="an-sub"></div></div>
+        <div class="acts"><button class="btn pri" onclick="Anni.open()">＋ 新增</button></div>
+      </div>
+      <div class="tabs">
+        <button class="tab on" data-at="all" onclick="Anni.tab('all')">全部</button>
+        <button class="tab" data-at="birthday" onclick="Anni.tab('birthday')">🎂 生日</button>
+        <button class="tab" data-at="anni" onclick="Anni.tab('anni')">💝 纪念日</button>
+      </div>
+      <div class="grid g2">
+        <div class="card">
+          <div class="ct"><h3><span class="dot">⏳</span>倒计时列表</h3><span class="r" id="an-r"></span></div>
+          <div class="scroll" id="an-list"></div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">🗓️</span>双历日历</h3>
+            <span class="r"><button class="icobtn" onclick="Anni.mv(-1)">‹</button><b id="an-cal-t"></b><button class="icobtn" onclick="Anni.mv(1)">›</button></span></div>
+          <div class="cal-wk"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+          <div class="cal" id="an-cal"></div>
+          <div id="an-cal-info" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 经期 ============ -->
+    <section class="page" id="p-period">
+      <div class="ph">
+        <div><h1>🌸 经期记录</h1><div class="sub" id="pd-sub"></div></div>
+        <div class="acts"><button class="btn pri" onclick="Period.open()">＋ 记录经期</button></div>
+      </div>
+      <div class="grid g4" style="margin-bottom:16px" id="pd-stats"></div>
+      <div class="grid g2">
+        <div class="card">
+          <div class="ct"><h3><span class="dot">📅</span>经期日历</h3>
+            <span class="r"><button class="icobtn" onclick="Period.mv(-1)">‹</button><b id="pd-cal-t"></b><button class="icobtn" onclick="Period.mv(1)">›</button></span></div>
+          <div class="cal-wk"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+          <div class="cal" id="pd-cal"></div>
+          <div class="lg">
+            <span><i style="background:#f3a7bd"></i>经期</span><span><i style="background:#f7cbd8"></i>预测经期</span>
+            <span><i style="background:#c4b6eb"></i>排卵日</span><span><i style="background:#e0d8f5"></i>易孕期</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">📖</span>历史记录</h3><span class="r" id="pd-r"></span></div>
+          <div class="scroll" id="pd-list"></div>
+          <hr class="sp">
+          <div class="frm-row">
+            <div><label class="fl">平均周期（天）</label><input type="number" id="pd-cyc" min="15" max="60" onchange="Period.saveCfg()"></div>
+            <div><label class="fl">平均经期（天）</label><input type="number" id="pd-len" min="2" max="15" onchange="Period.saveCfg()"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 设置 ============ -->
+    <section class="page" id="p-set">
+      <div class="ph"><div><h1>⚙️ 设置</h1><div class="sub">个人资料 · 偏好设置 · 数据管理</div></div></div>
+      <div class="grid g2">
+        <div class="card">
+          <div class="ct"><h3><span class="dot">👤</span>个人资料</h3></div>
+          <div class="frm">
+            <div class="frm-row">
+              <div><label class="fl">昵称</label><input id="se-name" placeholder="你的名字"></div>
+              <div><label class="fl">星仔昵称</label><input id="se-baby" placeholder="星仔"></div>
+            </div>
+            <div class="frm-row">
+              <div><label class="fl">身高（cm）</label><input type="number" id="se-h" placeholder="160"></div>
+              <div><label class="fl">当前体重（kg）</label><input type="number" step="0.1" id="se-w" placeholder="55"></div>
+              <div><label class="fl">目标体重（kg）</label><input type="number" step="0.1" id="se-wt" placeholder="50"></div>
+            </div>
+            <button class="btn pri" onclick="Settings.saveProfile()">保存资料</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">🎛️</span>偏好设置</h3></div>
+          <div class="frm">
+            <div class="flexline" style="justify-content:space-between"><span>每日单词数量</span>
+              <input type="number" id="se-wc" min="5" max="60" style="width:90px" onchange="Settings.savePref()"></div>
+            <div class="flexline" style="justify-content:space-between"><span>每日语句数量</span>
+              <input type="number" id="se-sc" min="1" max="20" style="width:90px" onchange="Settings.savePref()"></div>
+            <div class="flexline" style="justify-content:space-between"><span>每日饮茶目标（ml）</span>
+              <input type="number" id="se-tea" min="0" step="100" style="width:110px" onchange="Settings.savePref()"></div>
+            <div class="flexline" style="justify-content:space-between"><span>朗读语速</span>
+              <input type="range" id="se-rate" min="0.5" max="1.3" step="0.1" style="width:130px" onchange="Settings.savePref()"></div>
+            <div class="flexline" style="justify-content:space-between"><span>新闻在线抓取</span>
+              <label class="sw"><input type="checkbox" id="se-online" onchange="Settings.savePref()"><i></i></label></div>
+            <div class="flexline" style="justify-content:space-between"><span>启动打开页面</span>
+              <select id="se-start" style="width:130px" onchange="Settings.savePref()"></select></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">🍼</span>星仔喂养默认清单</h3></div>
+          <div id="se-baby-items"></div>
+          <div class="flexline" style="margin-top:9px">
+            <input id="se-baby-new" placeholder="新增默认喂养项，如：睡前奶" style="flex:1;min-width:120px">
+            <button class="btn sm pri" onclick="Settings.addBabyItem()">添加</button>
+          </div>
+          <div class="hint" style="margin-top:10px">修改只影响之后的日期，已有记录不受影响。</div>
+        </div>
+        <div class="card">
+          <div class="ct"><h3><span class="dot">💾</span>数据管理</h3></div>
+          <div id="se-usage" style="margin-bottom:12px"></div>
+          <div class="flexline">
+            <button class="btn pri" onclick="Settings.exportData()">⬇️ 导出备份</button>
+            <button class="btn" onclick="document.getElementById('se-file').click()">⬆️ 导入备份</button>
+            <input type="file" id="se-file" accept=".json" style="display:none" onchange="Settings.importData(this)">
+            <button class="btn dg" onclick="Settings.clearAll()">🗑️ 清空所有数据</button>
+          </div>
+          <div class="hint" style="margin-top:12px">数据全部保存在本机浏览器（localStorage），不会上传任何服务器。建议定期导出备份。</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+<div class="mask" id="mask" onclick="if(event.target===this)UI.close()"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="lunar.js"></script>
+<script src="app.js"></script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
