@@ -421,6 +421,7 @@ const WORDS = [
 
 /* ===================== 存储 ===================== */
 const KEY='xiaoxiao_workbench_v1';
+const BK_KEY='xiaoxiao_workbench_last_backup';   // 上次导出备份日期
 const DEF={
   profile:{name:'',baby:'星仔',h:'',w:'',wt:''},
   pref:{wc:30,sc:5,tea:800,rate:0.9,online:false,start:'home'},
@@ -1620,8 +1621,13 @@ const Settings={
     this.renderBabyItems();
     const sz=(new Blob([localStorage.getItem(KEY)||'']).size/1024).toFixed(1);
     const bmi=(p.h&&p.w)?(p.w/Math.pow(p.h/100,2)).toFixed(1):null;
+    const lb=localStorage.getItem(BK_KEY)||'';
+    const gap=lb?Math.floor((parseD(today())-parseD(lb))/864e5):null;
+    const bkText=lb?(gap<=0?'今天':gap+' 天前'):'从未备份';
+    const bkColor=(!lb||gap>=14)?'#e08a7b':'#2f9e78';
     document.getElementById('se-usage').innerHTML=
       `<div class="mini"><span class="ic">📦</span>数据占用<span class="v">${sz} KB</span></div>
+      <div class="mini"><span class="ic">💾</span>上次备份<span class="v" style="color:${bkColor}">${bkText}</span></div>
       <div class="mini"><span class="ic">📝</span>待办 / 账目<span class="v">${DB.todos.length} / ${DB.txs.length}</span></div>
       <div class="mini"><span class="ic">🏃</span>运动 / 饮食<span class="v">${DB.sports.length} / ${DB.diets.length}</span></div>
       <div class="mini"><span class="ic">📅</span>纪念日 / 经期<span class="v">${DB.annis.length} / ${DB.periods.length}</span></div>
@@ -1662,6 +1668,7 @@ const Settings={
     const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);
     a.download='小小工作台备份_'+today()+'.json';a.click();
+    try{localStorage.setItem(BK_KEY,today());}catch(e){}
     setTimeout(()=>URL.revokeObjectURL(a.href),1000);UI.toast('已导出备份 ✓');
   },
   importData(input){
@@ -1687,12 +1694,24 @@ const Settings={
 };
 
 /* ===================== 启动 ===================== */
+function backupTip(){
+  const has=DB.todos.length+DB.txs.length+DB.sports.length+DB.diets.length+
+            DB.annis.length+DB.periods.length>0;
+  if(!has)return;
+  const lb=localStorage.getItem(BK_KEY);
+  if(!lb){UI.toast('小提示：设置 → 数据管理 可以导出备份');return;}
+  const gap=Math.floor((parseD(today())-parseD(lb))/864e5);
+  if(gap>=14)UI.toast('已 '+gap+' 天没备份了，建议去设置导出一份');
+}
 function boot(){
   load();buildNav();
   News.autoCheck();
-  const s=DB.pref.start||'home';
+  const qp=new URLSearchParams(location.search).get('p');   // 支持桌面快捷方式 ?p=todo
+  const s=qp||DB.pref.start||'home';
   UI.go(PAGES.some(p=>p[0]===s)?s:'home');
   if(DB.pref.online)setTimeout(()=>News.online(),1200);
+  if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+  setTimeout(backupTip,1600);
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape')UI.close();
     if(e.key==='Enter'&&document.getElementById('mask').classList.contains('on')){

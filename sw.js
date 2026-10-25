@@ -1,5 +1,5 @@
 /* 小小工作台 Service Worker */
-const CACHE='xiaoxiao-workbench-v2';
+const CACHE='xiaoxiao-workbench-v3';
 const ASSETS=['./','./index.html','./manifest.json','./app.js','./lunar.js','./style.css',
   './icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png'];
 
